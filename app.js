@@ -10,44 +10,54 @@ app.use(bodyParser.json());
 // Logic
 var servers = {};
 
-
-// Routes
-app.post('/servers', function(req, res) {
+function registerService(req) {
   console.log('headers', req.headers);
   if (!req.body.name || !req.body.host) {
-    res.send(400);
-    return;
+    return 400;
   }
   if (!servers[req.body.name]) {
     servers[req.body.name] = [];
   }
-  servers[req.body.name].push(req.headers.host);
-  res.send(req.body);
+  servers[req.body.name].push(req.body.host);
+  return req.body;
+}
+
+function getService(req) {
+  if (!servers[req.params.name]) {
+    return 404;
+  } else {
+    return {
+      hosts: servers[req.params.name]
+    };
+  }
+}
+
+function removeService(req) {
+  var server = servers[req.params.name];
+  delete servers[req.params.name];
+  return server;
+}
+
+
+// Routes
+app.post('/servers', function(req, res) {
+  res.send(registerService(req));
 });
 
 app.get('/servers', function(req, res) {
-  // res.send(servers);
   res.send(501);
 });
 
 app.get('/servers/:name', function(req, res) {
-  if (!servers[req.params.name]) {
-    res.send(404);
-  } else {
-    res.send(servers[req.params.name]);
-  }
+  res.send(getService(req));
 });
 
 app.put('/servers/:name', function(req, res) {
-  // servers[req.params.name] = req.body;
-  // res.sendStatus(204);
   res.send(501);
 });
 
 app.delete('/servers/:name', function(req, res) {
-  var server = servers[req.params.name];
-  delete servers[req.params.name];
-  res.send(server);
+  res.send(removeService(req));
 });
 
 app.listen(8081);
