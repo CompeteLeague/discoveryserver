@@ -18,6 +18,7 @@ as a NPM module for other applications to use.
 ## Dependencies
 - [ExpressJS](https://expressjs.com/)
 - [body-parser](https://www.npmjs.com/package/body-parser)
+- [level](https://github.com/Level/level)
 
 ## LICENSE
 [MIT LICENSE](https://github.com/CompeteLeague/discoveryserver/blob/master/LICENSE)
